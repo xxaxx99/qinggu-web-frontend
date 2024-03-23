@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors":true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    // paths
+    "baseUrl": ".",
+    "paths": {
+      "~@/*": ["src/*"],
+      "~/*": ["src/*"],
+      "@/*": ["src/*"],
+      "~#/*": ["src/enums/*"]
+    },
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "node_modules/.pnpm/unplugin-auto-import@0.16.7_@vueuse+core@10.7.1/node_modules/unplugin-auto-import/auto-imports.d.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "ts-node": {
+    "esm": true
+  }
+}
