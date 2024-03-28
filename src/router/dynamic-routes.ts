@@ -31,6 +31,7 @@ export default [
       title: '管理页',
       icon: 'TableOutlined',
       locale: 'menu.list',
+      access: AccessEnum.ADMIN,
     },
     component: basicRouteMap.RouteView,
     children: [
@@ -50,7 +51,6 @@ export default [
         meta: {
           title: '用户管理',
           locale: 'menu.admin.user-admin',
-          access: AccessEnum.ADMIN,
         },
       },
     ],
@@ -66,15 +66,6 @@ export default [
     },
     component: basicRouteMap.RouteView,
     children: [
-      {
-        path: '/account/center',
-        name: 'AccountCenter',
-        component: () => import('~/pages/account/center.vue'),
-        meta: {
-          title: '个人主页',
-          locale: 'menu.account.center',
-        },
-      },
       {
         path: '/account/settings',
         name: 'AccountSettings',
