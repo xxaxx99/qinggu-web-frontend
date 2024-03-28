@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { UploadChangeParam, UploadFile } from 'ant-design-vue'
+import { InboxOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue'
 
 interface UploadProps {
@@ -38,20 +39,24 @@ function handleDrop(e: DragEvent) {
     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
     @change="handleChange"
     @drop="handleDrop"
+    class="fileUploader"
   >
     <p class="ant-upload-drag-icon">
-      <inbox-outlined />
+      <InboxOutlined />
     </p>
     <p class="ant-upload-text">
-      Click or drag file to this area to upload
+      点击或者拖拽文件上传
     </p>
     <p class="ant-upload-hint">
-      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-      band files
+      {{props.description}}
     </p>
   </a-upload-dragger>
 </template>
 
 <style scoped lang="less">
-
+.fileUploader {
+  display: block;
+  width: 460px;
+  margin: 0 auto;
+}
 </style>
