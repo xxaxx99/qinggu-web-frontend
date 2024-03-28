@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { LogoutOutlined, ProfileOutlined } from '@ant-design/icons-vue'
 
 const message = useMessage()
 const userStore = useUserStore()
@@ -7,7 +7,6 @@ const multiTabStore = useMultiTab()
 const layoutMenuStore = useLayoutMenu()
 const router = useRouter()
 const { avatar, userName, userInfo } = storeToRefs(userStore)
-console.log(userInfo)
 async function handleClick({ key }: any) {
   if (key === 'logout') {
     const hide = message.loading('退出登录...', 0)
@@ -37,14 +36,6 @@ async function handleClick({ key }: any) {
     <template #overlay>
       <a-menu @click="handleClick">
         <a-menu-item key="0">
-          <template #icon>
-            <UserOutlined />
-          </template>
-          <RouterLink to="/account/center">
-            个人中心
-          </RouterLink>
-        </a-menu-item>
-        <a-menu-item key="1">
           <template #icon>
             <ProfileOutlined />
           </template>

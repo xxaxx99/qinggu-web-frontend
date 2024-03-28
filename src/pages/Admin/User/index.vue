@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInstance, MenuProps, PaginationProps, TableProps } from 'ant-design-vue'
+import type { MenuProps, PaginationProps, TableProps } from 'ant-design-vue'
 import { Modal, message } from 'ant-design-vue'
 
 import {
@@ -148,7 +148,6 @@ interface FormValues {
   userRole: string
 }
 
-const formRef = ref<FormInstance>()
 const formState = reactive<FormValues>({
   userAccount: '',
   userName: '',
@@ -556,7 +555,7 @@ async function onDelete(row: Api.User) {
       mask-closable cancel-text="重置" @ok="handleOk(formState)"
       @cancel="resetForm"
     >
-      <a-form ref="formRef" :model="formState" layout="vertical" name="form_in_modal">
+      <a-form :model="formState" layout="vertical" name="form_in_modal">
         <a-form-item
           name="userAccount"
           label="用户账号"

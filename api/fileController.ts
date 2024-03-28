@@ -1,4 +1,4 @@
-import request from '../http/request.ts';
+import request from '../src/autoapi/http/request.ts';
 
 /** uploadFile POST /api/file/upload */
 export async function uploadFileUsingPost(
@@ -11,9 +11,6 @@ export async function uploadFileUsingPost(
 
   return request<Api.BaseResponseString_>('/api/file/upload', {
     method: 'POST',
-    // params: {
-    //   biz: params.biz
-    // },
     data: {
       biz: params.biz,
         file: file
