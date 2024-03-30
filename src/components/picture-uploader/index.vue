@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
-import {LoadingOutlined, PlusOutlined} from '@ant-design/icons-vue'
+import {PlusOutlined} from '@ant-design/icons-vue'
 import type {UploadFile, UploadProps} from 'ant-design-vue'
 import {message} from 'ant-design-vue'
 import {uploadFileUsingPost} from '~/autoapi/api/fileController.ts'
+import {FileListItem} from "~/stores/upload-picture.ts";
 
 
 interface Props {
@@ -13,16 +14,17 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  biz: 'user_avatar',
-  // eslint-disable-next-line ts/ban-ts-comment
+  biz: '',
   // @ts-expect-error
   value: [] as UploadFile[],
   description: '',
 })
 
-const fileList = ref([])
-const loading = ref<boolean>(false)
-const imageUrl = ref<string>('')
+
+const fileList = ref<FileListItem[]>([])
+const pictureStore = usePictureStore();
+// 初始化时从 Pinia store 中获取 fileList
+setTimeout(() => { fileList.value = pictureStore.fileList }, 200)
 
 const previewVisible = ref(false)
 const previewImage = ref('')
@@ -50,9 +52,8 @@ function handleCancel() {
   previewVisible.value = false
 }
 
-async function customRequest(fileObj: any) {
+const customRequest = async (fileObj: any) => {
   try {
-    console.log(fileObj.file)
     const res = await uploadFileUsingPost(
         {biz: props.biz},
         fileObj.file,
@@ -60,28 +61,37 @@ async function customRequest(fileObj: any) {
     if (res.code === 40000)
       message.error(`上传失败，${res.message}`)
     fileObj.onSuccess(res.data)
+    pictureStore.addFile({
+      uid: fileObj.file.uid,
+      name: fileObj.file.name,
+      status: 'done',
+      url: res.data,
+    }) // 将图片信息存储到 Pinia store 中
   } catch (e: any) {
     message.error(`上传失败，${e.message}`)
     fileObj.onError(e)
   }
 }
+
 </script>
 
 <template>
   <div class="clearfix">
     <a-upload
         v-model:file-list="fileList"
-        name="avatar"
+        name="user_avatar"
         list-type="picture-card"
         class="avatar-uploader"
         :custom-request="customRequest"
+        max-count="1"
         method="post"
         style="margin-top: 12px"
+        @remove="pictureStore.clearFileList()"
         @preview="handlePreview"
     >
       <div v-if="fileList.length < 1">
         <plus-outlined />
-        <div style="margin-top: 8px">Upload</div>
+        <div style="margin-top: 8px">上传</div>
       </div>
     </a-upload>
     <a-modal :open="previewVisible" :footer="null" @cancel="handleCancel">

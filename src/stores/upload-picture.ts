@@ -12,9 +12,15 @@ export const usePictureStore = defineStore('picture', () => {
         fileList.value.push(file)
     }
 
+    // 在组件销毁时清空 fileList 数据
+    const clearFileList = () => {
+        fileList.value = [];
+    };
+
     return {
         fileList,
-        addFile
+        addFile,
+        clearFileList
     }
 })
 

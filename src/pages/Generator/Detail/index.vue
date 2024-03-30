@@ -19,11 +19,17 @@
           <div style="margin-bottom: 24px"/>
           <a-space size="middle">
             <a-button type="primary">立即使用</a-button>
-            <a-button >
+            <a-button @click="downloadGenerator">
               <template #icon>
                 <DownloadOutlined />
               </template>
               下载
+            </a-button>
+            <a-button v-if="userId === generatorData.userId" @click="updateGenerator">
+              <template #icon>
+                <EditOutlined />
+              </template>
+              编辑
             </a-button>
           </a-space>
         </a-col>
@@ -51,32 +57,35 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {getGeneratorVoByIdUsingGet} from "~/autoapi/api/generatorController.ts";
+import {downloadGeneratorByIdUsingGet, getGeneratorVoByIdUsingGet} from "~/autoapi/api/generatorController.ts";
 import {message} from "ant-design-vue";
-import { DownloadOutlined } from '@ant-design/icons-vue';
+import { DownloadOutlined, EditOutlined } from '@ant-design/icons-vue';
 import moment from "moment";
 import BasicInfo from "~/pages/Generator/Detail/components/BasicInfo.vue";
 import FileConfig from "~/pages/Generator/Detail/components/FileConfig.vue";
 import ModelConfig from "~/pages/Generator/Detail/components/ModelConfig.vue";
 import GeneratorVO = Api.GeneratorVO;
+import router from "~/router";
 
 const activeKey = ref('1');
+const userStore = useUserStore();
+const userId = ref(userStore.userInfo?.id)
 const loading = shallowRef(false)
 const generatorData = ref<GeneratorVO>({})
 const props = defineProps({
   id: String
 })
-const id = props.id
-
+console.log(props.id)
 
 /**
  * 加载数据
  */
 const loadData = async () => {
-  if (!id) {
+  if (!props.id) {
     return;
   }
   loading.value = true
+  const id = props.id
   try {
     const res = await getGeneratorVoByIdUsingGet({
       id,
@@ -92,6 +101,25 @@ const loadData = async () => {
 watchEffect(() => {
   loadData();
 })
+
+const updateGenerator = () => {
+  router.push({
+    path:'/generator/add',
+    query:{
+      id: generatorData.value.id
+    }
+  })
+}
+
+const downloadGenerator = async () => {
+  const blob = await downloadGeneratorByIdUsingGet(
+      {id: props.id},
+      {
+        responseType: 'blob',
+      },
+  );
+  const fullPath = generatorData.value.distPath || ''
+}
 </script>
 
 <style scoped lang="less">

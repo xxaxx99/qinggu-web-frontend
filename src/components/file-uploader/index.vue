@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { UploadChangeParam, UploadFile } from 'ant-design-vue'
+import type { UploadFile } from 'ant-design-vue'
 import { InboxOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue'
+import {uploadFileUsingPost} from "~/autoapi/api/fileController.ts";
 
 interface UploadProps {
   biz: string
@@ -10,35 +11,36 @@ interface UploadProps {
 }
 const props = withDefaults(defineProps<UploadProps>(), {
   biz: '',
-  // eslint-disable-next-line vue/require-valid-default-prop
-  value: [],
+  //@ts-expect-error
+  value: [] as UploadFile[],
   description: '',
 })
 
 const fileList = ref([])
-function handleChange(info: UploadChangeParam) {
-  const status = info.file.status
-  if (status !== 'uploading')
-    console.log(info.file, info.fileList)
-
-  if (status === 'done')
-    message.success(`${info.file.name} file uploaded successfully.`)
-  else if (status === 'error')
-    message.error(`${info.file.name} file upload failed.`)
-}
-function handleDrop(e: DragEvent) {
-  console.log(e)
+const customRequest = async (fileObj: any) => {
+  try {
+    const res = await uploadFileUsingPost(
+        {biz: props.biz},
+        fileObj.file,
+    ) as any
+    if (res.code === 40000)
+      message.error(`上传失败，${res.message}`)
+    fileObj.onSuccess(res.data)
+  } catch (e: any) {
+    message.error(`上传失败，${e.message}`)
+    fileObj.onError(e)
+  }
 }
 </script>
 
 <template>
   <a-upload-dragger
     v-model:fileList="fileList"
+    list-type="text"
     name="file"
-    :multiple="true"
-    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-    @change="handleChange"
-    @drop="handleDrop"
+    :multiple="false"
+    max-count="1"
+    :custom-request="customRequest"
     class="fileUploader"
   >
     <p class="ant-upload-drag-icon">

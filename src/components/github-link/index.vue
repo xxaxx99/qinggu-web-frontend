@@ -3,7 +3,7 @@ import { GithubOutlined } from '@ant-design/icons-vue'
 </script>
 
 <template>
-  <a href="https://github.com/xxaxx99/qinggu-frontend" target="_blank" hover="bg-[var(--hover-color)]" flex items-center h-48px px-12px text-16px class="transition-all-300">
+  <a href="https://github.com/xxaxx99/qinggu-web-frontend" target="_blank" hover="bg-[var(--hover-color)]" flex items-center h-48px px-12px text-16px class="transition-all-300">
     <GithubOutlined />
   </a>
 </template>

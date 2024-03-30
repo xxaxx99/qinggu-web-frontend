@@ -24,6 +24,16 @@ export default [
     },
   },
   {
+    path: '/generator/update',
+    name: '修改生成器',
+    component: () => import('~/pages/Generator/Add/index.vue'),
+    meta: {
+      title: '修改生成器',
+      locale: '修改生成器',
+      hideInMenu: true
+    },
+  },
+  {
     path: '/admin',
     redirect: '/admin/user',
     name: 'List',

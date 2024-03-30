@@ -20,6 +20,7 @@ import {
   searchUsersUsingGet,
   updateUserUsingPost
 } from '~/autoapi/api/userController.ts'
+import moment from "moment/moment";
 
 // const message = useMessage()
 const reload = inject('reload', () => {
@@ -525,6 +526,12 @@ async function onDelete(row: Api.User) {
                 {{ text }}
               </template>
             </div>
+          </template>
+          <template v-if="column.dataIndex === 'createTime'">
+            {{moment(record.createTime).format('YYYY-MM-DD hh:mm:ss')}}
+          </template>
+          <template v-if="column.dataIndex === 'updateTime'">
+            {{moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss')}}
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">

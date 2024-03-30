@@ -216,6 +216,11 @@ declare namespace Api {
     id?: string
   }
 
+  interface downloadGeneratorByIdUsingGETParams {
+    /** id */
+    id?: string;
+  };
+
   interface LoginUserVO {
     createTime?: string
     id?: string
@@ -335,6 +340,11 @@ declare namespace Api {
     /** biz */
     biz?: string
   }
+
+  interface DownloadFileUsingGETParams {
+    /** filepath */
+    filepath?: string
+  };
 
   interface User {
     createTime?: string

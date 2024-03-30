@@ -53,7 +53,7 @@ async function handleClick({ key }: any) {
       </a-menu>
     </template>
   </a-dropdown>
-  <a-dropdown v-else>
-    111
-  </a-dropdown>
+  <a-button v-else type="primary" @click="router.push('/login')">
+    登录
+  </a-button>
 </template>

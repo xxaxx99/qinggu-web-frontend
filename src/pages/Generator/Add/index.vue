@@ -5,11 +5,19 @@ import FileConfig from "~/pages/Generator/Add/components/FileConfig.vue";
 import ModelConfig from "~/pages/Generator/Add/components/ModelConfig.vue";
 import GeneratorFile from "~/pages/Generator/Add/components/GeneratorFile.vue";
 import GeneratorAddRequest = Api.GeneratorAddRequest;
+import {
+  addGeneratorUsingPost,
+  editGeneratorUsingPost,
+  getGeneratorVoByIdUsingGet
+} from "~/autoapi/api/generatorController.ts";
+import {message} from "ant-design-vue";
+import GeneratorEditRequest = Api.GeneratorEditRequest;
+import router from "~/router";
 
-
-
+const pictureStore = usePictureStore();
 const current = ref<number>(0)
 function next() {
+  console.log(formState.value)
   current.value++
 }
 function prev() {
@@ -49,28 +57,144 @@ const formState = ref<GeneratorAddRequest>({
   picture: '',
   fileConfig: {},
   modelConfig: {},
+  distPath: ''
 })
 
-const generateAdd = (formState:GeneratorAddRequest) => {
-  console.log(formState)
+const id = useUrlSearchParams('history').id as string;
+const oldData = ref<GeneratorEditRequest>({
+  name: '',
+  description: '',
+  basePackage: '',
+  version: '',
+  author: '',
+  tags: undefined,
+  picture: '',
+  fileConfig: {},
+  modelConfig: {},
+  distPath: ''
+});
+
+
+const loadData = async () => {
+  if (!id){
+    return;
+  }
+  try {
+    // 这个await还没得到值但是子组件已经完成所有渲染了
+    // 所以props是空的
+    const res = await getGeneratorVoByIdUsingGet({
+      id,
+    }) as any;
+    if (res.data) {
+      oldData.value = res.data
+      //@ts-expect-error
+      // 这里获取数据存到了pictureStore
+      pictureStore.addFile({
+        url: res.data.picture
+      });
+    }
+  }catch (error: any){
+    message.error('加载数据失败，' + error.message);
+  }
 }
+// 拿这个来说
+watchEffect(() => {
+  loadData()
+})
+
+
+/**
+ * 创建
+ * @param values
+ */
+const doAdd = async (values: GeneratorAddRequest) => {
+  try {
+    const res = await addGeneratorUsingPost(values);
+    if (res.data) {
+      message.success('创建成功');
+      await router.push({
+        path:'/'
+      })
+    }
+  } catch (error: any) {
+    message.error('创建失败，' + error.message);
+  }
+};
+
+/**
+ * 更新
+ * @param values
+ */
+const doUpdate = async (values: GeneratorEditRequest) => {
+  try {
+    const res = await editGeneratorUsingPost(values);
+    if (res.data) {
+      message.success('更新成功');
+      await router.push({
+        path:"/"
+      })
+    }
+  } catch (error: any) {
+    message.error('更新失败，' + error.message);
+  }
+};
+
+/**
+ * 提交
+ * @param values
+ */
+const doSubmit = async (values: GeneratorAddRequest) => {
+  // 数据转换
+  if (!values.fileConfig) {
+    values.fileConfig = {};
+  }
+  if (!values.modelConfig) {
+    values.modelConfig = {};
+  }
+  values.picture = pictureStore.fileList[0].url
+  // 文件列表转 url
+  if (values.distPath && values.distPath.length > 0) {
+    // @ts-ignore
+    values.distPath = values.distPath[0].response;
+  }
+
+  if (id) {
+    await doUpdate({
+      id,
+      ...values,
+    });
+  } else {
+    await doAdd(values);
+  }
+};
+
+onUnmounted(() => {
+  pictureStore.clearFileList();
+})
 </script>
 
 <template>
   <div>
     <div class="steps-content">
       <a-steps :current="current" :items="items" style="width: 1150px;margin: 0 auto;padding-bottom:30px " />
-      <component :is="steps[current].component" :formState="formState" />
+      <component :is="steps[current].component" :formState="formState" :oldData="oldData"/>
       <div class="steps-action">
         <a-button v-if="current < steps.length - 1" type="primary" @click="next">
           下一步
         </a-button>
         <a-button
-          v-if="current === steps.length - 1"
+          v-if="current === steps.length - 1 && !id"
           type="primary"
-          @click="generateAdd(formState)"
+          @click="doSubmit(formState)"
         >
           提交
+        </a-button>
+        <a-button
+            v-else-if="current === steps.length - 1 && id"
+            type="primary"
+            @click="doSubmit(oldData)"
+        >
+          修改
         </a-button>
         <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">
           上一步

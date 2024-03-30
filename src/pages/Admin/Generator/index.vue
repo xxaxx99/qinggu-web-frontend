@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import type { FormInstance, MenuProps, PaginationProps } from 'ant-design-vue'
 import { Modal, Tag, message } from 'ant-design-vue'
+import moment from "moment";
 
 import {
   ColumnHeightOutlined,
@@ -581,6 +582,12 @@ function handleChange(value: SelectValue) {
               </template>
             </div>
           </template>
+          <template v-if="column.dataIndex === 'createTime'">
+            {{moment(record.createTime).format('YYYY-MM-DD hh:mm:ss')}}
+          </template>
+          <template v-if="column.dataIndex === 'updateTime'">
+            {{moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss')}}
+          </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
               <span v-if="editableData[record.key]">
@@ -594,7 +601,7 @@ function handleChange(value: SelectValue) {
               </span>
               <a-popconfirm
                 v-if="dataSource.length"
-                title="Sure to delete?"
+                title="确定要删除吗?"
                 @confirm="onDelete(record)"
               >
                 <a v-if="visible" style="color: red">删除</a>
