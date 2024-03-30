@@ -13,8 +13,10 @@ import {
 import {message} from "ant-design-vue";
 import GeneratorEditRequest = Api.GeneratorEditRequest;
 import router from "~/router";
+import {useFileStore} from "~/stores/upload-file.ts";
 
 const pictureStore = usePictureStore();
+const fileStore = useFileStore();
 const current = ref<number>(0)
 function next() {
   console.log(formState.value)
@@ -53,7 +55,7 @@ const formState = ref<GeneratorAddRequest>({
   basePackage: '',
   version: '',
   author: '',
-  tags: undefined,
+  tags: [],
   picture: '',
   fileConfig: {},
   modelConfig: {},
@@ -90,14 +92,17 @@ const loadData = async () => {
       //@ts-expect-error
       // 这里获取数据存到了pictureStore
       pictureStore.addFile({
-        url: res.data.picture
+        url: res.data?.picture
+      });
+      //@ts-expect-error
+      fileStore.addFile({
+        url: res.data?.distPath
       });
     }
   }catch (error: any){
     message.error('加载数据失败，' + error.message);
   }
 }
-// 拿这个来说
 watchEffect(() => {
   loadData()
 })
@@ -144,6 +149,8 @@ const doUpdate = async (values: GeneratorEditRequest) => {
  * @param values
  */
 const doSubmit = async (values: GeneratorAddRequest) => {
+  setTimeout(() => { }, 200)
+  console.log(values)
   // 数据转换
   if (!values.fileConfig) {
     values.fileConfig = {};
@@ -151,12 +158,14 @@ const doSubmit = async (values: GeneratorAddRequest) => {
   if (!values.modelConfig) {
     values.modelConfig = {};
   }
-  values.picture = pictureStore.fileList[0].url
-  // 文件列表转 url
-  if (values.distPath && values.distPath.length > 0) {
-    // @ts-ignore
-    values.distPath = values.distPath[0].response;
-  }
+  values.picture = pictureStore.fileList[0]?.url
+  values.distPath = fileStore.fileList[0]?.url
+  // console.log(values)
+  // // 文件列表转 url
+  // if (values.distPath && values.distPath.length > 0) {
+  //   // @ts-ignore
+  //   values.distPath = values.distPath[0].response;
+  // }
 
   if (id) {
     await doUpdate({
@@ -170,6 +179,7 @@ const doSubmit = async (values: GeneratorAddRequest) => {
 
 onUnmounted(() => {
   pictureStore.clearFileList();
+  fileStore.clearFileList();
 })
 </script>
 

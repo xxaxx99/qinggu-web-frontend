@@ -56,7 +56,7 @@ setTimeout(() => { temp() }, 500)
     <div style="width: min-content">
       <span style="float: left">图片</span>
       <!-- todo props传值 -->
-      <picture-uploader style="margin-top: 15px" :biz="`user_avatar`" :image-url="formState.picture"/>
+      <picture-uploader style="margin-top: 15px" :biz="`user_avatar`"/>
     </div>
   </a-form>
   </template>
