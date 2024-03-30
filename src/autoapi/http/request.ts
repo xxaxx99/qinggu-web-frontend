@@ -50,6 +50,16 @@ async function requestHandler(config: InternalAxiosRequestConfig & RequestConfig
 }
 
 function responseHandler(response: any): ResponseBody<any> | AxiosResponse<any> | Promise<any> | any {
+
+  // 响应
+  const { data } = response ;
+  if (!data) {
+    throw new Error('服务异常');
+  }
+  // 文件下载时，直接返回
+  if (data instanceof Blob) {
+    return response;
+  }
   return response.data
 }
 
