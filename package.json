@@ -33,6 +33,7 @@
     "@v-c/utils": "^0.0.26",
     "@vueuse/core": "^10.7.1",
     "ant-design-vue": "^4.0.8",
+    "file-saver": "^2.0.5",
     "axios": "^1.6.3",
     "dayjs": "1.11.10",
     "lodash-es": "^4.17.21",

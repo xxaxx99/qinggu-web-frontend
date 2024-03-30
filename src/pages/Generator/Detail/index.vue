@@ -66,6 +66,7 @@ import FileConfig from "~/pages/Generator/Detail/components/FileConfig.vue";
 import ModelConfig from "~/pages/Generator/Detail/components/ModelConfig.vue";
 import GeneratorVO = Api.GeneratorVO;
 import router from "~/router";
+import { saveAs } from 'file-saver';
 
 const activeKey = ref('1');
 const userStore = useUserStore();
@@ -104,7 +105,7 @@ watchEffect(() => {
 
 const updateGenerator = () => {
   router.push({
-    path:'/generator/add',
+    path:'/generator/update',
     query:{
       id: generatorData.value.id
     }
@@ -112,13 +113,15 @@ const updateGenerator = () => {
 }
 
 const downloadGenerator = async () => {
-  const blob = await downloadGeneratorByIdUsingGet(
+  const res = await downloadGeneratorByIdUsingGet(
       {id: props.id},
       {
         responseType: 'blob',
       },
   );
+  const blob = new Blob([res.data]);
   const fullPath = generatorData.value.distPath || ''
+  saveAs(blob, fullPath.substring(fullPath.lastIndexOf('/') + 1));
 }
 </script>
 
