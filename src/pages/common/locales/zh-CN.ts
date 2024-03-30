@@ -1,6 +1,6 @@
 export default {
   //  登录页面
-  'pages.layouts.userLayout.title': '代码生成器在线制作共享,大幅提高开发效率',
+  'pages.layouts.userLayout.title': '开发者的得力小助手,让代码生成变得快捷',
   'pages.login.accountLogin.tab': '账户密码登录',
   'pages.login.register.tab': '新用户注册',
   'pages.login.accountLogin.errorMessage': '错误的用户名和密码(admin/admin)',

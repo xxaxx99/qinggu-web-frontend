@@ -1,4 +1,4 @@
-import request from '../src/autoapi/http/request.ts';
+import request from '../src/autoapi/http/request';
 
 /** uploadFile POST /api/file/upload */
 export async function uploadFileUsingPost(
