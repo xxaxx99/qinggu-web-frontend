@@ -13,7 +13,6 @@ const notification = useNotification()
 const appStore = useAppStore()
 const { layoutSetting } = storeToRefs(appStore)
 const router = useRouter()
-const token = useAuthorization()
 const loginModel = reactive({
   username: undefined,
   password: undefined,
@@ -74,10 +73,8 @@ async function submit() {
         type: 'mobile',
       } as unknown as LoginMobileParams
     }
-    // 这里登录成功之后存token然后
     const data = await loginApi(params)
     if (data?.code === 0) {
-      token.value = data.data?.token
       notification.success({
         message: '登录成功',
         description: '欢迎回来！',

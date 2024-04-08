@@ -3,6 +3,7 @@ import router from '~/router'
 import { useMetaTitle } from '~/composables/meta-title'
 import { setRouteEmitter } from '~@/utils/route-listener'
 import {message} from "ant-design-vue";
+import {getLoginUserUsingGet} from "~/autoapi/api/userController.ts";
 
 const allowList = ['/login','/register', '/error', '/401', '/404', '/403']
 const loginPath = '/login'
@@ -11,9 +12,8 @@ router.beforeEach(async (to, _, next) => {
   setRouteEmitter(to)
   // 获取
   const userStore = useUserStore()
-  const token = useAuthorization()
-  if (!token.value) {
-    //  如果token不存在就跳转到登录页面
+  const res = await getLoginUserUsingGet() as any
+  if (res.code === 40100) {
     if (!allowList.includes(to.path) && !to.path.startsWith('/redirect')) {
       next({
         path: loginPath,
