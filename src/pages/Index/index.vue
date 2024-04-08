@@ -5,26 +5,14 @@ import type {SelectValue} from 'ant-design-vue/es/select'
 import _relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import {listGeneratorVoByPageUsingPost} from '~/autoapi/api/generatorController.ts'
-import GeneratorDetail from '../Generator/Detail/index.vue'
 
 import GeneratorQueryRequest = Api.GeneratorQueryRequest
 import PageGeneratorVO = Api.PageGeneratorVO_
+import router from "~/router";
 
 dayjs.extend(_relativeTime)
 const activeKey = ref('1')
 const loading = shallowRef(false)
-const open = ref<boolean>(false);
-
-const modalId = ref()
-const showModal = (id) => {
-  open.value = true;
-  modalId.value = id
-};
-
-const handleOk = (e: MouseEvent) => {
-  console.log(e);
-  open.value = false;
-};
 
 const formModel = reactive({
   name: undefined,
@@ -81,7 +69,6 @@ const pagination = reactive<PaginationProps>({
 })
 
 async function doSearch() {
-  // console.log('我进来了')
   loading.value = true
   const currentSearchParams = ref<GeneratorQueryRequest>({...searchParams.value}) // 创建新引用
   try {
@@ -190,7 +177,7 @@ watchEffect(() => {
     <div class="mt-4">
       <a-list :data-source="dataList" :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 4, xxl: 4 }"
               :pagination="pagination">
-<!--        这里是一个插槽 我点击的不应该是每一项独立的吗 这里是自定义每一项的意思不是吗 item.id 应该是每个独立的吧因为这些每一项的卡片展示出来都不一样-->
+        <!--        这里是一个插槽 我点击的不应该是每一项独立的吗 这里是自定义每一项的意思不是吗 item.id 应该是每个独立的吧因为这些每一项的卡片展示出来都不一样-->
         <template #renderItem="{ item }">
           <a-list-item style="padding: 0">
             <a-card hoverable>
@@ -201,7 +188,11 @@ watchEffect(() => {
                          src="https://partner-bucket-xx.oss-cn-beijing.aliyuncs.com/0152b8d0-3136-43f9-bf03-027f060064c6.png"
                          height="254.76px"/>
               </template>
-              <div @click="showModal(item.id)">
+              <!-- :to="{ path: '/user', query: { id: this.id }}"-->
+              <div @click="router.push({
+                name: '修改生成器',
+                params: { id: item.id }
+              })">
                 <a-card-meta :title="item.name">
                   <template #description>
                     <div class="h-44px">
@@ -222,39 +213,11 @@ watchEffect(() => {
                   </div>
                 </div>
               </div>
-<!--              <div>-->
-<!--                <a-modal-->
-<!--                    v-model:open="open"-->
-<!--                    width="100%"-->
-<!--                    wrap-class-name="full-modal"-->
-<!--                    @ok="handleOk"-->
-<!--                >-->
-<!--                  &lt;!&ndash;  这里是点击展示模态框 然后传id  &ndash;&gt;-->
-<!--                  <GeneratorDetail :id="item.id"/>-->
-<!--                  <template #footer>-->
-<!--                    <a-button type="primary" @click="handleOk">关闭</a-button>-->
-<!--                  </template>-->
-<!--                </a-modal>-->
-<!--              </div>-->
             </a-card>
           </a-list-item>
         </template>
       </a-list>
     </div>
-  </div>
-  <div>
-    <a-modal
-        v-model:open="open"
-        width="100%"
-        wrap-class-name="full-modal"
-        @ok="handleOk"
-    >
-      <!--  这里是点击展示模态框 然后传id  -->
-      <GeneratorDetail :id="modalId"/>
-      <template #footer>
-        <a-button type="primary" @click="handleOk">关闭</a-button>
-      </template>
-    </a-modal>
   </div>
 </template>
 <style lang="less">

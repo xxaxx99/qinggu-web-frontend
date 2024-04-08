@@ -550,17 +550,6 @@ function handleChange(value: SelectValue) {
           </a-tooltip>
         </a-space>
       </template>
-      <!--      <a-table :loading="loading" :columns="filterColumns" :data-source="dataSource" :pagination="pagination" :size="tableSize[0] as TableProps['size']"> -->
-      <!--        <template #bodyCell="{ column, record }"> -->
-      <!--          <template v-if="column.dataIndex === 'action'"> -->
-      <!--            <div flex gap-2> -->
-      <!--              <a c-error @click="handleDelete(record as ConsultTableModel)"> -->
-      <!--                删除 -->
-      <!--              </a> -->
-      <!--            </div> -->
-      <!--          </template> -->
-      <!--        </template> -->
-      <!--      </a-table> -->
       <a-table
         :loading="loading" :columns="filterColumns" :data-source="dataSource" :pagination="pagination"
         :size="tableSize[0] " :scroll="{ x: 1900 }"

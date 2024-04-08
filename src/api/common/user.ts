@@ -4,6 +4,7 @@ export interface UserInfo {
   nickName: string
   userAvatar: string
   userRole?: string | number
+  userProfile? :string
 }
 
 export function getUserInfoApi() {

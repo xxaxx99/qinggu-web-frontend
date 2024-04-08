@@ -9,6 +9,6 @@ defineOptions({
 <template>
     <a decoration-none href="https://github.com/xxaxx99/qinggu-web-frontend" target="_blank">
       <GithubOutlined />
-      GidHub源码
+      GitHub源码
     </a>
 </template>

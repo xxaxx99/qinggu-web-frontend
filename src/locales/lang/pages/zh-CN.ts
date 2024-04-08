@@ -172,7 +172,7 @@ export default {
   'account.settings.form-rule-desc': '请输入个人简介',
   'account.settings.basic-avatar': '头像',
   'account.settings.basic-avatar.upload': '上传头像',
-  'account.settings.form-submit': '提交',
+  'account.settings.form-submit': '修改',
   'account.settings.security.account-password': '账户密码',
   'account.settings.security.account-password-desc': '当前密码强度: 强',
   'account.settings.security.phone': '密保手机',

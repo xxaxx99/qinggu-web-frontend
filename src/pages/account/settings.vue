@@ -38,10 +38,6 @@ function seti18n(key: string) {
       return t('account.settings.basic-setting')
     case '2':
       return t('account.settings.security-setting')
-    case '3':
-      return t('account.settings.account-setting')
-    case '4':
-      return t('account.settings.message-setting')
   }
 }
 </script>
@@ -60,8 +56,6 @@ function seti18n(key: string) {
       <a-col :span="20">
         <basicSetting v-if="selectedKeys[0] === '1'" />
         <securitySetting v-if="selectedKeys[0] === '2'" />
-        <accountSetting v-if="selectedKeys[0] === '3'" />
-        <messageSetting v-if="selectedKeys[0] === '4'" />
       </a-col>
     </a-row>
   </a-card>

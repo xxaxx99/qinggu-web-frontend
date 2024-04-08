@@ -17,16 +17,8 @@ const data = computed<DataItem[]>(() => {
       desc: t('account.settings.security.phone-desc'),
     },
     {
-      title: t('account.settings.security-problem'),
-      desc: t('account.settings.security-problem-desc'),
-    },
-    {
       title: t('account.settings.security.email'),
       desc: t('account.settings.security.email-desc'),
-    },
-    {
-      title: t('account.settings.security.MFA'),
-      desc: t('account.settings.security.MFA-desc'),
     },
   ]
 })

@@ -32,14 +32,14 @@ const steps = [
     component: BasicInfo
   },
   {
-    title: '文件配置',
-    content: 'Second-content',
-    component: FileConfig
-  },
-  {
     title: '模型配置',
     content: 'Last-content',
     component: ModelConfig
+  },
+  {
+    title: '文件配置',
+    content: 'Second-content',
+    component: FileConfig
   },
   {
     title: '生成器文件',
@@ -187,7 +187,9 @@ onUnmounted(() => {
   <div>
     <div class="steps-content">
       <a-steps :current="current" :items="items" style="width: 1150px;margin: 0 auto;padding-bottom:30px " />
-      <component :is="steps[current].component" :formState="formState" :oldData="oldData"/>
+      <keep-alive>
+        <component :is="steps[current].component" :formState="formState" :oldData="oldData"/>
+      </keep-alive>
       <div class="steps-action">
         <a-button v-if="current < steps.length - 1" type="primary" @click="next">
           下一步

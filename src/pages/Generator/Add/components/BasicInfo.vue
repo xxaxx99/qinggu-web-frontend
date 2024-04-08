@@ -28,7 +28,6 @@ setTimeout(() => { temp() }, 500)
     >
       <a-input v-model:value="formState.name" placeholder="请输入"/>
     </a-form-item>
-    {{}}
     <a-form-item
         name="description"
         label="描述"
