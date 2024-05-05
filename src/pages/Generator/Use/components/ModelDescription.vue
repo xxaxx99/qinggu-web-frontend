@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import ModelConfig = Api.ModelConfig;
+
 interface descriptionsProps {
   column: number
   modelConfig: ModelConfig

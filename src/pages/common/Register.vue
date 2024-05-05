@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { LockOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { delayTimer } from '@v-c/utils'
 import { AxiosError } from 'axios'
 import GlobalLayoutFooter from '~/layouts/components/global-footer/index.vue'
@@ -7,7 +7,6 @@ import pageBubble from '@/utils/page-bubble'
 import { userRegisterUsingPost } from '~/autoapi/api/userController.ts'
 import UserRegisterRequest = Api.UserRegisterRequest;
 
-const message = useMessage()
 const notification = useNotification()
 const appStore = useAppStore()
 const { layoutSetting } = storeToRefs(appStore)
@@ -23,12 +22,11 @@ const registerModel = reactive({
 })
 const { t } = useI18nLocale()
 const formRef = shallowRef()
-const codeLoading = shallowRef(false)
 const resetCounter = 60
 const submitLoading = shallowRef(false)
 const errorAlert = shallowRef(false)
 const bubbleCanvas = ref<HTMLCanvasElement>()
-const { counter, pause, reset, resume, isActive } = useInterval(1000, {
+const { pause } = useInterval(1000, {
   controls: true,
   immediate: false,
   callback(count) {
@@ -38,22 +36,6 @@ const { counter, pause, reset, resume, isActive } = useInterval(1000, {
     }
   },
 })
-
-async function getCode() {
-  codeLoading.value = true
-  try {
-    await formRef.value.validate(['mobile'])
-    setTimeout(() => {
-      reset()
-      resume()
-      codeLoading.value = false
-      message.success('验证码是：123456')
-    }, 3000)
-  }
-  catch (error) {
-    codeLoading.value = false
-  }
-}
 
 async function registerSubmit() {
   submitLoading.value = true
@@ -126,7 +108,7 @@ onBeforeUnmount(() => {
     </div>
     <div class="login-content flex-center">
       <div class="ant-pro-form-login-main rounded">
-        <!-- 登录头部 -->
+        <!-- 注册头部 -->
         <div
           class="flex-between h-15 px-4 mb-[2px]"
         >
@@ -141,31 +123,16 @@ onBeforeUnmount(() => {
               {{ t("pages.layouts.userLayout.title") }}
             </span>
           </div>
-          <div class="login-lang flex-center relative z-11">
-            <span
-              class="flex-center cursor-pointer text-16px"
-              @click="appStore.toggleTheme(layoutSetting.theme === 'dark' ? 'light' : 'dark')"
-            >
-              <!-- 亮色和暗黑模式切换按钮 -->
-              <template v-if="layoutSetting.theme === 'light'">
-                <carbon-moon />
-              </template>
-              <template v-else>
-                <carbon-sun />
-              </template>
-            </span>
-            <!--            <SelectLang /> -->
-          </div>
         </div>
         <a-divider m-0 />
-        <!-- 登录主体 -->
+        <!-- 注册主体 -->
         <div class="box-border flex min-h-[520px]">
-          <!-- 登录框左侧 -->
+          <!-- 注册框左侧 -->
           <div class="ant-pro-form-login-main-left min-h-[520px] flex-center  bg-[var(--bg-color-container)]">
             <img src="@/assets/images/login-left.png" class="h-5/6 w-5/6">
           </div>
           <a-divider m-0 type="vertical" class="ant-pro-login-divider  min-h-[520px]" />
-          <!-- 登录框右侧 -->
+          <!-- 注册框右侧 -->
           <div class="ant-pro-form-login-main-right px-5 w-[335px] flex-center flex-col relative z-11">
             <div class="text-center py-6 text-2xl">
               {{ t('pages.login.tips') }}
@@ -174,8 +141,8 @@ onBeforeUnmount(() => {
               <a-tabs v-model:activeKey="registerModel.type" centered>
                 <a-tab-pane key="account" :tab="t('pages.login.register.tab')" />
               </a-tabs>
-              <template v-if="registerModel.type === 'account'">
-                <a-form-item name="username">
+              <template v-if="registerModel.type === 'account'" >
+                <a-form-item name="userAccount" :rules="[{ required: true, message: t('pages.register.username.required') }]">
                   <a-input
                     v-model:value="registerModel.userAccount" allow-clear
                     autocomplete="off"
@@ -186,7 +153,7 @@ onBeforeUnmount(() => {
                     </template>
                   </a-input>
                 </a-form-item>
-                <a-form-item name="password">
+                <a-form-item name="userPassword" :rules="[{ required: true, message: t('pages.register.password.required') }]">
                   <a-input-password
                     v-model:value="registerModel.userPassword" allow-clear
                     placeholder="请输入密码" size="large" @press-enter="registerSubmit"
@@ -196,7 +163,7 @@ onBeforeUnmount(() => {
                     </template>
                   </a-input-password>
                 </a-form-item>
-                <a-form-item name="checkPassword">
+                <a-form-item name="checkPassword" :rules="[{ required: true, message: t('pages.register.checkPassword.required') }]">
                   <a-input-password
                     v-model:value="registerModel.checkPassword" allow-clear
                     placeholder="请确认密码" size="large" @press-enter="registerSubmit"
@@ -207,51 +174,7 @@ onBeforeUnmount(() => {
                   </a-input-password>
                 </a-form-item>
               </template>
-              <template v-if="registerModel.type === 'mobile'">
-                <a-form-item
-                  name="mobile" :rules="[
-                    { required: true, message: t('pages.login.phoneNumber.required') },
-                    {
-                      pattern: /^(86)?1([38][0-9]|4[579]|5[0-35-9]|6[6]|7[0135678]|9[89])[0-9]{8}$/,
-                      message: t('pages.login.phoneNumber.invalid'),
-                    },
-                  ]"
-                >
-                  <a-input
-                    v-model:value="registerModel.mobile" allow-clear
-                    :placeholder="t('pages.login.phoneNumber.placeholder')" size="large" @press-enter="registerSubmit"
-                  >
-                    <template #prefix>
-                      <MobileOutlined />
-                    </template>
-                  </a-input>
-                </a-form-item>
-                <a-form-item name="code" :rules="[{ required: true, message: t('pages.login.captcha.required') }]">
-                  <div flex items-center>
-                    <a-input
-                      v-model:value="registerModel.code"
-                      style="flex: 1 1 0%; transition: width 0.3s ease 0s; margin-right: 8px;" allow-clear
-                      :placeholder="t('pages.login.captcha.placeholder')" size="large" @press-enter="registerSubmit"
-                    >
-                      <template #prefix>
-                        <LockOutlined />
-                      </template>
-                    </a-input>
-                    <a-button :loading="codeLoading" :disabled="isActive" size="large" @click="getCode">
-                      <template v-if="!isActive">
-                        {{ t('pages.login.phoneLogin.getVerificationCode') }}
-                      </template>
-                      <template v-else>
-                        {{ resetCounter - counter }} {{ t('pages.getCaptchaSecondText') }}
-                      </template>
-                    </a-button>
-                  </div>
-                </a-form-item>
-              </template>
               <div class="mb-24px flex-between" style="justify-content: end">
-                <!--                <a-checkbox v-model:checked="registerModel.remember"> -->
-                <!--                  {{ t('pages.login.rememberMe') }} -->
-                <!--                </a-checkbox> -->
                 <router-link to="/login">
                   老用户登录
                 </router-link>
@@ -260,14 +183,6 @@ onBeforeUnmount(() => {
                 {{ t('pages.register.submit') }}
               </a-button>
             </a-form>
-            <!--            <a-divider> -->
-            <!--              <span class="text-slate-500">{{ t('pages.login.loginWith') }}</span> -->
-            <!--            </a-divider> -->
-            <!--            <div class="ant-pro-form-login-other"> -->
-            <!--              <AlipayCircleFilled class="icon" /> -->
-            <!--              <TaobaoCircleFilled class="icon" /> -->
-            <!--              <WeiboCircleFilled class="icon" /> -->
-            <!--            </div> -->
           </div>
         </div>
       </div>

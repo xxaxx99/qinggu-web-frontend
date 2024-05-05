@@ -129,10 +129,8 @@ watchEffect(() => {
       <!-- todo 不同标签页响应不同的数据 -->
       <a-tabs v-model:activeKey="activeKey" size="large">
         <a-tab-pane key="newest" tab="最新">
-          Content of Tab Pane 1
         </a-tab-pane>
         <a-tab-pane key="recommend" tab="推荐" force-render>
-          Content of Tab Pane 2
         </a-tab-pane>
       </a-tabs>
       <div>
@@ -177,7 +175,6 @@ watchEffect(() => {
     <div class="mt-4">
       <a-list :data-source="dataList" :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 4, xxl: 4 }"
               :pagination="pagination">
-        <!--        这里是一个插槽 我点击的不应该是每一项独立的吗 这里是自定义每一项的意思不是吗 item.id 应该是每个独立的吧因为这些每一项的卡片展示出来都不一样-->
         <template #renderItem="{ item }">
           <a-list-item style="padding: 0">
             <a-card hoverable>
@@ -188,9 +185,8 @@ watchEffect(() => {
                          src="https://partner-bucket-xx.oss-cn-beijing.aliyuncs.com/0152b8d0-3136-43f9-bf03-027f060064c6.png"
                          height="254.76px"/>
               </template>
-              <!-- :to="{ path: '/user', query: { id: this.id }}"-->
               <div @click="router.push({
-                name: '修改生成器',
+                name: '生成器详情',
                 params: { id: item.id }
               })">
                 <a-card-meta :title="item.name">

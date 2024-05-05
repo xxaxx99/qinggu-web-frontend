@@ -113,7 +113,6 @@ const props = defineProps<{
   oldData: GeneratorEditRequest
 }>()
 const formStateProps = props.formState
-const oldData = ref(props.oldData)
 const formState = reactive<GeneratorAddRequest>(formStateProps)
 console.log(formState)
 

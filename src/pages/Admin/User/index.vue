@@ -16,8 +16,7 @@ import type { ConsultTableParams } from '~/api/list/table-list.ts'
 import { getUserListApi } from '~/api/list/table-list.ts'
 import {
   addUserUsingPost,
-  deleteUserUsingPost,
-  searchUsersUsingGet,
+  deleteUserUsingPost, listUserByPageUsingPost,
   updateUserUsingPost
 } from '~/autoapi/api/userController.ts'
 import moment from "moment/moment";
@@ -221,13 +220,13 @@ async function init() {
 }
 
 async function onSearch() {
-  const res = await searchUsersUsingGet({
+  const res = await listUserByPageUsingPost({
     userName: formModel?.userName,
     userAccount: formModel?.userAccount,
     userRole: formModel?.userRole,
   }) as any
   if (res?.code === 0) {
-    dataSource.value = [...res?.data] ?? []
+    dataSource.value = [...res?.data?.records] ?? []
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
     pagination.total = data?.total
@@ -244,7 +243,7 @@ async function onSearch() {
   await init()
 }
 
-async function onReset() {
+const onReset = () => {
   // 清空所有参数重新请求
   formModel.userName = undefined
   formModel.userAccount = undefined
@@ -397,9 +396,6 @@ async function onDelete(row: Api.User) {
 
 <template>
   <div>
-    <a-typography-title :level="4" style="margin-bottom: 16px">
-      用户管理
-    </a-typography-title>
     <a-card mb-4>
       <a-form :label-col="{ span: 7 }" :model="formModel">
         <a-row :gutter="[15, 0]">

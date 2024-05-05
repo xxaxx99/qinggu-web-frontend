@@ -89,11 +89,13 @@ const loadData = async () => {
     }) as any;
     if (res.data) {
       oldData.value = res.data
-      //@ts-expect-error
       // 这里获取数据存到了pictureStore
-      pictureStore.addFile({
-        url: res.data?.picture
-      });
+      if (res.data.picture){
+        //@ts-expect-error
+        pictureStore.addFile({
+          url: res.data?.picture
+        })
+      }
       //@ts-expect-error
       fileStore.addFile({
         url: res.data?.distPath
@@ -114,12 +116,15 @@ watchEffect(() => {
  */
 const doAdd = async (values: GeneratorAddRequest) => {
   try {
-    const res = await addGeneratorUsingPost(values);
-    if (res.data) {
+    const res = await addGeneratorUsingPost(values) as any;
+    if (res.code === 0) {
       message.success('创建成功');
       await router.push({
         path:'/'
       })
+    }
+    else {
+      message.error('创建失败，' + res.message + '，名称或者描述不能为空');
     }
   } catch (error: any) {
     message.error('创建失败，' + error.message);
@@ -160,12 +165,6 @@ const doSubmit = async (values: GeneratorAddRequest) => {
   }
   values.picture = pictureStore.fileList[0]?.url
   values.distPath = fileStore.fileList[0]?.url
-  // console.log(values)
-  // // 文件列表转 url
-  // if (values.distPath && values.distPath.length > 0) {
-  //   // @ts-ignore
-  //   values.distPath = values.distPath[0].response;
-  // }
 
   if (id) {
     await doUpdate({

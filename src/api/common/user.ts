@@ -1,10 +1,10 @@
 export interface UserInfo {
   id: number | string
   userName: string
-  nickName: string
   userAvatar: string
   userRole?: string | number
   userProfile? :string
+  userAccount? :string
 }
 
 export function getUserInfoApi() {

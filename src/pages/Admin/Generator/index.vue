@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import type { FormInstance, MenuProps, PaginationProps } from 'ant-design-vue'
 import { Modal, Tag, message } from 'ant-design-vue'
-import moment from "moment";
+import moment from 'moment'
 
 import {
   ColumnHeightOutlined,
@@ -19,7 +19,7 @@ import {
   addGeneratorUsingPost,
   deleteGeneratorUsingPost,
   listGeneratorByPageUsingPost,
-  updateGeneratorUsingPost
+  updateGeneratorUsingPost,
 } from '~/autoapi/api/generatorController.ts'
 
 // const message = useMessage()
@@ -38,10 +38,6 @@ const columns = shallowRef([
   {
     title: '描述',
     dataIndex: 'description',
-  },
-  {
-    title: '基础包',
-    dataIndex: 'basePackage',
   },
   {
     title: '版本',
@@ -94,10 +90,6 @@ const columns = shallowRef([
       // @ts-expect-error
       return status?.value === '0' ? '默认' : '默认'
     },
-  },
-  {
-    title: '创建用户',
-    dataIndex: 'userId',
   },
   {
     title: '创建时间',
@@ -188,6 +180,7 @@ const state = reactive({
   checkAll: true,
   checkList: getCheckList.value,
 })
+
 interface FormValues {
   name: string
   description: string
@@ -251,6 +244,7 @@ function resetForm() {
 async function handleOk(values: FormValues) {
   values.fileConfig = JSON.parse((values.fileConfig || '{}') as string)
   values.modelConfig = JSON.parse((values.modelConfig || '{}') as string)
+  // eslint-disable-next-line ts/ban-ts-comment
   // @ts-expect-error
   const res = await addGeneratorUsingPost(values) as any
   if (res?.code === 0) {
@@ -396,7 +390,7 @@ function edit(key: string) {
   editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0])
 }
 
-async function save(key: string, row: Api.Generator) {
+async function save(key: string, row: Api.GeneratorUpdateRequest) {
   Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key])
   delete editableData[key]
   console.log(row)
@@ -447,9 +441,6 @@ function handleChange(value: SelectValue) {
 
 <template>
   <div>
-    <a-typography-title :level="4" style="margin-bottom: 16px">
-      代码生成器管理
-    </a-typography-title>
     <a-card mb-4>
       <a-form :label-col="{ span: 7 }" :model="formModel">
         <a-row :gutter="[15, 0]">
@@ -572,10 +563,48 @@ function handleChange(value: SelectValue) {
             </div>
           </template>
           <template v-if="column.dataIndex === 'createTime'">
-            {{moment(record.createTime).format('YYYY-MM-DD hh:mm:ss')}}
+            {{ moment(record.createTime).format('YYYY-MM-DD hh:mm:ss') }}
           </template>
           <template v-if="column.dataIndex === 'updateTime'">
-            {{moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss')}}
+            {{ moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss') }}
+          </template>
+          <template v-if="column.dataIndex === 'fileConfig'">
+            <a-popover trigger="click">
+              <template #content>
+                <json-viewer
+                  :value="JSON.parse(record.fileConfig)"
+                  boxed
+                  sort
+                />
+              </template>
+              <a-button type="primary" size="small">
+                查看
+              </a-button>
+            </a-popover>
+          </template>
+          <template v-if="column.dataIndex === 'modelConfig'">
+            <a-popover trigger="click">
+              <template #content>
+                <json-viewer
+                  :value="JSON.parse(record.modelConfig)"
+                  boxed
+                  sort
+                />
+              </template>
+              <a-button type="primary" size="small">
+                查看
+              </a-button>
+            </a-popover>
+          </template>
+          <template v-if="column.dataIndex === 'distPath'">
+            <a-popover trigger="click">
+              <template #content>
+                {{ record.distPath }}
+              </template>
+              <a-button type="primary" size="small">
+                查看
+              </a-button>
+            </a-popover>
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">

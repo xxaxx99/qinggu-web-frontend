@@ -4,6 +4,7 @@ import { useMetaTitle } from '~/composables/meta-title'
 import { setRouteEmitter } from '~@/utils/route-listener'
 import {message} from "ant-design-vue";
 import {getLoginUserUsingGet} from "~/autoapi/api/userController.ts";
+import BaseResponseLoginUserVO_ = Api.BaseResponseLoginUserVO_;
 
 const allowList = ['/login','/register', '/error', '/401', '/404', '/403']
 const loginPath = '/login'
@@ -12,7 +13,7 @@ router.beforeEach(async (to, _, next) => {
   setRouteEmitter(to)
   // 获取
   const userStore = useUserStore()
-  const res = await getLoginUserUsingGet() as any
+  const res = await getLoginUserUsingGet() as BaseResponseLoginUserVO_
   if (res.code === 40100) {
     if (!allowList.includes(to.path) && !to.path.startsWith('/redirect')) {
       next({

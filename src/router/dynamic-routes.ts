@@ -25,22 +25,32 @@ export default [
   },
   {
     path: '/generator/update',
-    name: '生成器详情',
+    name: '修改生成器',
     component: () => import('~/pages/Generator/Add/index.vue'),
     meta: {
-      title: '生成器详情',
-      locale: 'z-生成器详情',
-      hideInMenu: true
+      title: '修改生成器',
+      locale: '修改生成器',
+      hideInMenu: true,
     },
   },
   {
     path: '/generator/detail/:id',
-    name: '修改生成器',
+    name: '生成器详情',
     component: () => import('~/pages/Generator/Detail/index.vue'),
     meta: {
-      title: '修改生成器',
-      locale: '修改生成器',
-      hideInMenu: true
+      title: '生成器详情',
+      locale: '生成器详情',
+      hideInMenu: true,
+    },
+  },
+  {
+    path: '/generator/use/:id',
+    name: '使用生成器',
+    component: () => import('~/pages/Generator/Use/index.vue'),
+    meta: {
+      title: '使用生成器',
+      locale: '使用生成器',
+      hideInMenu: true,
     },
   },
   {

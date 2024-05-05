@@ -182,6 +182,11 @@ declare namespace Api {
     version?: string
   }
 
+  interface GeneratorUseRequest {
+    dataModel?: Record<string, any>
+    id?: string
+  };
+
   interface GeneratorVO {
     author?: string
     basePackage?: string
@@ -256,7 +261,7 @@ declare namespace Api {
     abbr?: string
     allArgsStr?: string
     condition?: string
-    defaultValue?: Record<string, any>
+    defaultValue?: string
     description?: string
     fieldName?: string
     groupKey?: string
@@ -386,6 +391,13 @@ declare namespace Api {
   }
 
   interface UserRegisterRequest {
+    checkPassword?: string
+    userAccount?: string
+    userPassword?: string
+  }
+
+  interface ModifyPasswordRequest {
+    id: number | string
     checkPassword?: string
     userAccount?: string
     userPassword?: string

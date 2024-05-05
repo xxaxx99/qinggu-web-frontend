@@ -14,12 +14,15 @@ import '~/assets/styles/reset.css'
 import 'uno.css'
 
 const pinia = createPinia()
+import JsonViewer from 'vue-json-viewer'
+
 async function start() {
   const app: App = createApp(Root)
   app.use(pinia)
   await setupI18n(app)
   setupDirective(app)
   app.use(router)
+  app.use(JsonViewer)
   app.mount('#app')
   app.config.performance = true
 }

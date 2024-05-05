@@ -8,7 +8,7 @@ import router from '~/router'
 export interface ResponseBody<T = any> {
   code: number
   data?: T
-  msg: string
+  message: string
 }
 
 export interface RequestConfigExtra {
@@ -60,7 +60,7 @@ function errorHandler(error: AxiosError): Promise<any> {
     if (status === 401) {
       notification?.error({
         message: '401',
-        description: data?.msg || statusText,
+        description: data?.message || statusText,
         duration: 3,
       })
       /**
@@ -79,21 +79,21 @@ function errorHandler(error: AxiosError): Promise<any> {
     else if (status === 403) {
       notification?.error({
         message: '403',
-        description: data?.msg || statusText,
+        description: data?.message || statusText,
         duration: 3,
       })
     }
     else if (status === 500) {
       notification?.error({
         message: '500',
-        description: data?.msg || statusText,
+        description: data?.message || statusText,
         duration: 3,
       })
     }
     else {
       notification?.error({
         message: '服务错误',
-        description: data?.msg || statusText,
+        description: data?.message || statusText,
         duration: 3,
       })
     }

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import basicSetting from './components/basic-setting.vue'
 import securitySetting from './components/security-setting.vue'
-import accountSetting from './components/account-setting.vue'
-import messageSetting from './components/message-setting.vue'
 
 const { t } = useI18n()
 const selectedKeys = ref(['1'])
@@ -12,22 +10,12 @@ const items = computed(() => {
     {
       key: '1',
       label: seti18n('1'),
-      title: 'Navigation One',
+      title: '基本信息',
     },
     {
       key: '2',
       label: seti18n('2'),
-      title: 'Navigation Two',
-    },
-    {
-      key: '3',
-      label: seti18n('3'),
-      title: 'Navigation Two',
-    },
-    {
-      key: '4',
-      label: seti18n('4'),
-      title: 'Navigation Two',
+      title: '安全设置',
     },
   ]
 })

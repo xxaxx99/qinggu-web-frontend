@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { LockOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { delayTimer } from '@v-c/utils'
 import { AxiosError } from 'axios'
 import GlobalLayoutFooter from '~/layouts/components/global-footer/index.vue'
@@ -8,7 +8,6 @@ import { loginApi } from '~@/api/common/login'
 import pageBubble from '@/utils/page-bubble'
 import { getQueryParam } from '~/utils/tools.ts'
 
-const message = useMessage()
 const notification = useNotification()
 const appStore = useAppStore()
 const { layoutSetting } = storeToRefs(appStore)
@@ -23,12 +22,11 @@ const loginModel = reactive({
 })
 const { t } = useI18nLocale()
 const formRef = shallowRef()
-const codeLoading = shallowRef(false)
 const resetCounter = 60
 const submitLoading = shallowRef(false)
 const errorAlert = shallowRef(false)
 const bubbleCanvas = ref<HTMLCanvasElement>()
-const { counter, pause, reset, resume, isActive } = useInterval(1000, {
+const { pause } = useInterval(1000, {
   controls: true,
   immediate: false,
   callback(count) {
@@ -38,22 +36,6 @@ const { counter, pause, reset, resume, isActive } = useInterval(1000, {
     }
   },
 })
-
-async function getCode() {
-  codeLoading.value = true
-  try {
-    await formRef.value.validate(['mobile'])
-    setTimeout(() => {
-      reset()
-      resume()
-      codeLoading.value = false
-      message.success('验证码是：123456')
-    }, 3000)
-  }
-  catch (error) {
-    codeLoading.value = false
-  }
-}
 
 async function submit() {
   submitLoading.value = true
@@ -73,8 +55,8 @@ async function submit() {
         type: 'mobile',
       } as unknown as LoginMobileParams
     }
-    const data = await loginApi(params)
-    if (data?.code === 0) {
+    const res = await loginApi(params)
+    if (res?.code === 0) {
       notification.success({
         message: '登录成功',
         description: '欢迎回来！',
@@ -89,7 +71,7 @@ async function submit() {
     else {
       notification.error({
         message: '登录失败',
-        description: '密码错误',
+        description: res.message,
       })
       submitLoading.value = false
     }
@@ -133,21 +115,6 @@ onBeforeUnmount(() => {
               {{ t("pages.layouts.userLayout.title") }}
             </span>
           </div>
-          <div class="login-lang flex-center relative z-11">
-            <span
-              class="flex-center cursor-pointer text-16px"
-              @click="appStore.toggleTheme(layoutSetting.theme === 'dark' ? 'light' : 'dark')"
-            >
-              <!-- 亮色和暗黑模式切换按钮 -->
-              <template v-if="layoutSetting.theme === 'light'">
-                <carbon-moon />
-              </template>
-              <template v-else>
-                <carbon-sun />
-              </template>
-            </span>
-            <!--            <SelectLang /> -->
-          </div>
         </div>
         <a-divider m-0 />
         <!-- 登录主体 -->
@@ -187,47 +154,6 @@ onBeforeUnmount(() => {
                       <LockOutlined />
                     </template>
                   </a-input-password>
-                </a-form-item>
-              </template>
-              <template v-if="loginModel.type === 'mobile'">
-                <a-form-item
-                  name="mobile" :rules="[
-                    { required: true, message: t('pages.login.phoneNumber.required') },
-                    {
-                      pattern: /^(86)?1([38][0-9]|4[579]|5[0-35-9]|66|7[0135678]|9[89])[0-9]{8}$/,
-                      message: t('pages.login.phoneNumber.invalid'),
-                    },
-                  ]"
-                >
-                  <a-input
-                    v-model:value="loginModel.mobile" allow-clear
-                    :placeholder="t('pages.login.phoneNumber.placeholder')" size="large" @press-enter="submit"
-                  >
-                    <template #prefix>
-                      <MobileOutlined />
-                    </template>
-                  </a-input>
-                </a-form-item>
-                <a-form-item name="code" :rules="[{ required: true, message: t('pages.login.captcha.required') }]">
-                  <div flex items-center>
-                    <a-input
-                      v-model:value="loginModel.code"
-                      style="flex: 1 1 0; transition: width 0.3s ease 0s; margin-right: 8px;" allow-clear
-                      :placeholder="t('pages.login.captcha.placeholder')" size="large" @press-enter="submit"
-                    >
-                      <template #prefix>
-                        <LockOutlined />
-                      </template>
-                    </a-input>
-                    <a-button :loading="codeLoading" :disabled="isActive" size="large" @click="getCode">
-                      <template v-if="!isActive">
-                        {{ t('pages.login.phoneLogin.getVerificationCode') }}
-                      </template>
-                      <template v-else>
-                        {{ resetCounter - counter }} {{ t('pages.getCaptchaSecondText') }}
-                      </template>
-                    </a-button>
-                  </div>
                 </a-form-item>
               </template>
               <div class="mb-24px flex-between" style="justify-content: end">

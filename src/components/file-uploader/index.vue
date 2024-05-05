@@ -3,7 +3,6 @@ import type { UploadFile } from 'ant-design-vue'
 import { InboxOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue'
 import {uploadFileUsingPost} from "~/autoapi/api/fileController.ts";
-import {FileListItem} from "~/stores/upload-picture.ts";
 
 interface UploadProps {
   biz: string
@@ -17,7 +16,7 @@ const props = withDefaults(defineProps<UploadProps>(), {
   description: '',
 })
 
-const fileList = ref<FileListItem[]>([])
+const fileList = ref<any[]>([])
 const fileStore = useFileStore();
 // 初始化时从 Pinia store 中获取 fileList
 setTimeout(() => { fileList.value = fileStore.fileList }, 200)
@@ -49,7 +48,7 @@ const customRequest = async (fileObj: any) => {
     list-type="text"
     name="file"
     :multiple="false"
-    max-count="1"
+    :max-count="1"
     :custom-request="customRequest"
     @remove="fileStore.clearFileList()"
     class="fileUploader"
