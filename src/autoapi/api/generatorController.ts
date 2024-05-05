@@ -80,7 +80,7 @@ export async function listGeneratorVoByPageUsingPost(
   body: Api.GeneratorQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<Api.BaseResponsePageGeneratorVO_>('/api/generator/list/page/vo', {
+  return request<Api.BaseResponsePageGeneratorVO_>('/api/generator/list/page/vo/fast', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -131,6 +131,21 @@ export async function downloadGeneratorByIdUsingGet(
     params: {
       ...params,
     },
+    ...(options || {}),
+  });
+}
+
+/** useGenerator POST /api/generator/use */
+export async function useGeneratorUsingPost(
+    body: Api.GeneratorUseRequest,
+    options?: { [key: string]: any },
+) {
+  return request<any>('/api/generator/use', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

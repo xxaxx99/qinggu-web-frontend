@@ -177,3 +177,18 @@ export async function updateMyUserUsingPost(
     ...(options || {}),
   })
 }
+
+/** userRegister POST /api/user/register */
+export async function modifyPasswordUsingPost(
+    body: Api.ModifyPasswordRequest,
+    options?: { [key: string]: any },
+) {
+  return request<Api.BaseResponseLong_>('/api/user/modifyPassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
