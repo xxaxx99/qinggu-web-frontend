@@ -7,7 +7,6 @@ const props = defineProps<{
   formState: GeneratorAddRequest
   oldData: GeneratorEditRequest
 }>()
-// 父组件在哪
 const formStateProps = props.formState
 const oldData = ref(props.oldData)
 const formState = reactive<GeneratorAddRequest>(formStateProps)
@@ -54,7 +53,6 @@ setTimeout(() => { temp() }, 500)
     </a-form-item>
     <div style="width: min-content">
       <span style="float: left">图片</span>
-      <!-- todo props传值 -->
       <picture-uploader style="margin-top: 15px" :biz="`user_avatar`"/>
     </div>
   </a-form>
@@ -66,27 +64,27 @@ setTimeout(() => { temp() }, 500)
           name="name"
           label="名称"
       >
-        <a-input v-model:value="props.oldData.name" placeholder="请输入"/>
+        <a-input v-model:value="oldData.name" placeholder="请输入"/>
       </a-form-item>
       {{}}
       <a-form-item
           name="description"
           label="描述"
       >
-        <a-textarea v-model:value="props.oldData.description" placeholder="请输入描述"/>
+        <a-textarea v-model:value="oldData.description" placeholder="请输入描述"/>
       </a-form-item>
       <a-form-item name="basePackage" label="基础包">
-        <a-input v-model:value="props.oldData.basePackage" placeholder="请输入基础包"/>
+        <a-input v-model:value="oldData.basePackage" placeholder="请输入基础包"/>
       </a-form-item>
       <a-form-item name="version" label="版本">
-        <a-input v-model:value="props.oldData.version" placeholder="请输入版本"/>
+        <a-input v-model:value="oldData.version" placeholder="请输入版本"/>
       </a-form-item>
       <a-form-item name="author" label="作者">
-        <a-input v-model:value="props.oldData.author" placeholder="请输入作者"/>
+        <a-input v-model:value="oldData.author" placeholder="请输入作者"/>
       </a-form-item>
       <a-form-item name="tags" label="标签">
         <a-select
-            v-model:value="props.oldData.tags"
+            v-model:value="oldData.tags"
             mode="tags"
             style="width: 100%"
             placeholder="请输入标签"
@@ -95,7 +93,6 @@ setTimeout(() => { temp() }, 500)
       </a-form-item>
       <div style="width: min-content">
         <span style="float: left">图片</span>
-        <!-- todo props传值 -->
         <picture-uploader style="margin-top: 15px" :biz="`user_avatar`"/>
       </div>
     </a-form>

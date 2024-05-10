@@ -563,10 +563,10 @@ function handleChange(value: SelectValue) {
             </div>
           </template>
           <template v-if="column.dataIndex === 'createTime'">
-            {{ moment(record.createTime).format('YYYY-MM-DD hh:mm:ss') }}
+            {{ record.createTime }}
           </template>
           <template v-if="column.dataIndex === 'updateTime'">
-            {{ moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss') }}
+            {{ record.updateTime }}
           </template>
           <template v-if="column.dataIndex === 'fileConfig'">
             <a-popover trigger="click">

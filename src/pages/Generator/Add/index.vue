@@ -19,7 +19,7 @@ const pictureStore = usePictureStore();
 const fileStore = useFileStore();
 const current = ref<number>(0)
 function next() {
-  console.log(formState.value)
+  console.log(oldData.value)
   current.value++
 }
 function prev() {
@@ -82,8 +82,6 @@ const loadData = async () => {
     return;
   }
   try {
-    // 这个await还没得到值但是子组件已经完成所有渲染了
-    // 所以props是空的
     const res = await getGeneratorVoByIdUsingGet({
       id,
     }) as any;

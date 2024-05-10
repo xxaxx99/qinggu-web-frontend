@@ -14,7 +14,6 @@ export const useUserStore = defineStore('user', () => {
     const userInfo = shallowRef<UserInfo>()
     const token = useAuthorization()
     const avatar = computed(() => userInfo.value?.userAvatar)
-    const nickname = computed(() => userInfo.value?.nickName ?? userInfo.value?.userName)
     const roles = computed(() => userInfo.value?.userRole)
     const userName = computed(() => userInfo.value?.userName)
     const userProfile = computed(() => userInfo.value?.userProfile)
@@ -69,7 +68,6 @@ export const useUserStore = defineStore('user', () => {
         menuData,
         generateDynamicRoutes,
         avatar,
-        nickname,
         userName,
         userProfile,
         userAccount

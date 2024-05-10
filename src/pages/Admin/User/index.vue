@@ -19,9 +19,7 @@ import {
   deleteUserUsingPost, listUserByPageUsingPost,
   updateUserUsingPost
 } from '~/autoapi/api/userController.ts'
-import moment from "moment/moment";
 
-// const message = useMessage()
 const reload = inject('reload', () => {
 })
 
@@ -504,14 +502,14 @@ async function onDelete(row: Api.User) {
       <!--        </template> -->
       <!--      </a-table> -->
       <a-table
-        :loading="loading" :columns="filterColumns" :data-source="dataSource" :pagination="pagination"
+        :loading="loading" :columns="filterColumns as any" :data-source="dataSource" :pagination="pagination"
         :size="tableSize[0] as TableProps['size']"
       >
         <template #avatar="avatarUrl">
           <img :src="avatarUrl.value" style="width:50px;heigth:50px" alt="">
         </template>
         <template #bodyCell="{ column, text, record }">
-          <template v-if="['userName', 'userAccount', 'userProfile'].includes(column.dataIndex)">
+          <template v-if="['userName', 'userAccount', 'userProfile'].includes(column.dataIndex as string)">
             <div>
               <a-input
                 v-if="editableData[record.key] as ConsultTableParams"
@@ -524,10 +522,10 @@ async function onDelete(row: Api.User) {
             </div>
           </template>
           <template v-if="column.dataIndex === 'createTime'">
-            {{moment(record.createTime).format('YYYY-MM-DD hh:mm:ss')}}
+            {{record.createTime}}
           </template>
           <template v-if="column.dataIndex === 'updateTime'">
-            {{moment(record.updateTime).format('YYYY-MM-DD hh:mm:ss')}}
+            {{record.updateTime}}
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">

@@ -7,7 +7,7 @@
   "repository": "antdv-pro/antdv-pro",
   "scripts": {
     "dev": "mist",
-    "build": "vue-tsc && mist build",
+    "build": "mist build",
     "clear:vercel": "rm -rf ./vercel.json",
     "build:vercel": "run-s clear:vercel build:nitro",
     "build:nitro": "mist build nitro",

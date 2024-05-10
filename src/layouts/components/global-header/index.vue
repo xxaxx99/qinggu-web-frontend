@@ -40,7 +40,7 @@ const cls = computed(() => ({
 
 <style lang="less">
 @import './index.less';
-:where(.css-dev-only-do-not-override-metyi7).ant-layout .ant-layout-header .ant-menu {
+.ant-layout-header .ant-menu {
   line-height: inherit;
   background: transparent;
 }

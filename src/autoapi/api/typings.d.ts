@@ -185,7 +185,23 @@ declare namespace Api {
   interface GeneratorUseRequest {
     dataModel?: Record<string, any>
     id?: string
-  };
+  }
+
+  interface GeneratorMakeRequest {
+    meta?: Meta;
+    zipFilePath?: string;
+  }
+
+  interface Meta {
+    author?: string;
+    basePackage?: string;
+    createTime?: string;
+    description?: string;
+    fileConfig?: FileConfig;
+    modelConfig?: ModelConfig;
+    name?: string;
+    version?: string;
+  }
 
   interface GeneratorVO {
     author?: string

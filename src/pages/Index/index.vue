@@ -115,7 +115,7 @@ watchEffect(() => {
 <template>
   <div h-full flex flex-col flex-1 max-w-1152px w-1152px mx-auto>
     <div>
-      <div style="display: flex; justify-content: center">
+      <div style="display: flex; justify-content: center" mb-8 mt>
         <a-input-search
             v-model:value="searchText"
             placeholder="请搜索生成器"
@@ -126,13 +126,6 @@ watchEffect(() => {
             @search="onSearch(searchText)"
         />
       </div>
-      <!-- todo 不同标签页响应不同的数据 -->
-      <a-tabs v-model:activeKey="activeKey" size="large">
-        <a-tab-pane key="newest" tab="最新">
-        </a-tab-pane>
-        <a-tab-pane key="recommend" tab="推荐" force-render>
-        </a-tab-pane>
-      </a-tabs>
       <div>
         <a-form :model="formModel">
           <a-row :gutter="[48, 0]">

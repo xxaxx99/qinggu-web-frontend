@@ -130,7 +130,7 @@ async function useGenerator() {
               </a-collapse>
             </template>
           </a-form>
-          <a-space size="middle">
+          <a-space size="middle" style="margin-top: 10px" >
             <a-button type="primary" @click="useGenerator">
               <template #icon>
                 <DownloadOutlined />
@@ -157,7 +157,7 @@ async function useGenerator() {
 </template>
 
 <style scoped lang="less">
-:deep(:where(.css-dev-only-do-not-override-metyi7).ant-col-8) {
+:deep(.ant-col-8) {
   display: block;
   flex: none;
   max-width: 33.33333333333333%;

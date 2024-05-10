@@ -149,3 +149,18 @@ export async function useGeneratorUsingPost(
     ...(options || {}),
   });
 }
+
+/** makeGenerator POST /api/generator/make */
+export async function makeGeneratorUsingPost(
+    body: Api.GeneratorMakeRequest,
+    options?: { [key: string]: any },
+) {
+  return request<any>('/api/generator/make', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

@@ -26,10 +26,6 @@ setTimeout(() => {
   </a-descriptions>
   <ModelDescription :column="2" :model-config="modelConfig" />
   <a-descriptions v-for="(model, index) in modelConfig.models" :column="1">
-    <template v-if="model.groupKey && index != 0" #title>
-      <FileOutlined />
-      核心模板
-    </template>
     <template v-if="model.groupKey">
       <a-descriptions-item label="分组key">
         {{ model.groupKey }}
